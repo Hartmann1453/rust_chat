@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Привет</title>
-    </head>
-    <body>
-        <h1>Hello world</h1>
-    </body>
+<html lang="ru">
+
+<div class="form_auth_block">
+  <div class="form_auth_block_content">
+    <p class="form_auth_block_head_text">Authorization</p>
+    <form class="form_auth_style" action="auth" method="post">
+      <label>Your login</label>
+      <input type="login" name="auth_login" placeholder="login" required >
+      <p></p>
+      <label>Your password</label>
+      <input type="password" name="auth_pass" placeholder="password" required >
+      <button class="form_auth_button" type="submit" name="form_auth_submit">Log in</button>
+    </form>
+  </div>
+</div>
+
+<br>
+<br>
+
+<div class="form_register_block">
+  <div class="form_register_block_content">
+    <p class="form_register_block_head_text">Registration</p>
+    <form class="form_register_style" action="register" method="post">
+      <label>Your login</label>
+      <input type="login" name="register_login" placeholder="login" required >
+      <p></p>
+      <label>Your password</label>
+      <input type="password" name="register_pass" placeholder="password" required >
+      <button class="form_register_button" type="submit" name="form_register_submit">Log up</button>
+    </form>
+  </div>
+</div>
+
 </html>

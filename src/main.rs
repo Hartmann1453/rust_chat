@@ -1,3 +1,4 @@
+use std::any::Any;
 use std::fmt::format;
 use std::fs;
 use std::net::TcpListener;
@@ -27,25 +28,43 @@ fn handler_connection(mut stream: TcpStream) {
     // Читаем пришедший запрос
     stream.read(&mut buffer).unwrap();
 
-    // Можем работать с запросом тут
-    /*println!(
-        "Запрос: {}",
-        String::from_utf8_lossy(&buffer[..])
-    )*/
+    // Пишем запрос в формат ютф_8
+    let x = String::from_utf8_lossy(&buffer[..]);
+    let mut filename = "404.html";
+    let mut status_line = "HTTP/1.1 404 NOT FOUND";
 
-    // ???
-    let get = b"GET / HTTP/1.1\r\n";
+    // Итерируем запрос построчно
+    for sp in x.split("\n") {
+        println!("Пришел запрос: {}", sp.trim());
 
-    // Начало тернарного оператора. Определяем статус запроса и подставляем ответ и файл для ответа
-    let (status_line, filename) =
+        // Смотрим какой запрос к нам пришел
+        match sp.trim() {
+            // Заход на главную страницу
+            "GET / HTTP/1.1" => {
+                status_line = "HTTP/1.1 200 OK";
+                filename = "index.html";
+            },
 
-    if buffer.starts_with(get) {
-        // Если всё ок, возвращаем ок и главную страницу
-        ("HTTP/1.1 200 OK", "index.html")
-    } else {
-        // Если не ок, возвращаем 404
-        ("HTTP/1.1 404 NOT FOUND", "404.html")
-    };
+            // Нажатие кнопки "Регистрация"
+            "POST /register HTTP/1.1" => {
+                status_line = "HTTP/1.1 200 OK";
+                filename = "register.html";
+            },
+
+            // Нажатие кнопки "Авторизация"
+            "POST /auth HTTP/1.1" => {
+                status_line = "HTTP/1.1 200 OK";
+                filename = "auth.html";
+            },
+
+            // Если не удалось найти подходящего запроса
+            _ => {
+                status_line = "HTTP/1.1 404 NOT FOUND";
+                filename = "404.html";
+            }
+        }
+        break
+    }
 
     // Указываем путь к контенту
     let contents = fs::read_to_string(filename).unwrap();
